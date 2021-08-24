@@ -1,0 +1,28 @@
+$("body").on("click", ".bx-pagination-container li>a", function (e)
+    {
+        e.preventDefault();
+        var formData = $("#hlblock-table-form").serializeArray();
+        var val = $(this).attr("href");
+        val = val.split("?");
+        pagen = val[1];
+
+        $.blockUI({
+            message: "<p>Пожалуйста подождите...</p>",
+            css: { backgroundColor: "#f00", color: "#fff" },
+            overlayCSS: { backgroundColor: "#000", opacity: 0.1, cursor: "wait" }
+        });
+        $("#intable").load(
+            ajaxPath + "/table.php",
+            { data: formData, pagen: pagen },
+            function ()
+            {
+                $(".editblock").hide();
+                $("#editform").hide();
+                $.unblockUI();
+                forTable();
+                $("input.edit:checkbox").setCheckboxesShift();
+                $("input.product_hidden:checkbox").setCheckboxesShift();
+                newItem = false;
+            }
+        );
+    });
